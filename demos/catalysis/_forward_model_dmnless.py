@@ -12,28 +12,27 @@ Date:
 import numpy as np
 from model_1 import *
 from model_2 import *
+from _utils import *
 import sys
-sys.path.insert(0,'../')
-from vuq import Model
-from vuq import view_as_column
 
 
 
-class CatalysisModelDMNLESS(Model):
+class CatalysisModelDMNLESS():
     """
     A class representing the forward model of the catalysis problem.
     """
 
-    def __init__(self, name='Catalysis model (dimensionless)'):
+    def __init__(self):
         """
         Initialize the object
         """
-        #self._kappa = x
-        super(CatalysisModelDMNLESS, self).__init__(5, 35, name=name)
+        self.num_input = 5
+        self.num_output = 35
 
-    def _eval(self, z):
+    def __call__(self, z):
         """
         Solves the dynamical system for given parameters x.
+        
         """
         z = view_as_column(z)
         x = np.exp(z)
@@ -53,9 +52,4 @@ class CatalysisModelDMNLESS(Model):
         for i in range(H.shape[1]):
             for j in range(H.shape[2]):
                 d2y[:,i,j]= np.delete(H[:,i,j].reshape((7,6)), 2, 1).reshape(35) # Delete the 3rd species
-        state = {}
-        state['f'] = y
-        state['f_grad'] = dy.T * x.T
-        xx = np.kron(x, x.T)
-        state['f_grad_2'] = d2y * xx
-        return state
+        return y

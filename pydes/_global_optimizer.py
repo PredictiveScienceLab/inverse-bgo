@@ -243,7 +243,7 @@ class GlobalOptimizer(object):
         self._X_masked_init = X_masked_init
         self._X_masked_design = X_masked_design
 
-    def optimize(self, max_it=100, tol=1e-1, fixed_noise=1e-6,
+    def optimize(self, max_it=100, tol=1e-1, fixed_noise=1e-8,
                  GPModelClass=GPy.models.GPRegression,
                  verbose=True,
                  add_at_least=10,

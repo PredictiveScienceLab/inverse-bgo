@@ -15,22 +15,68 @@ from mpl_toolkits.mplot3d import Axes3D
 import seaborn as sns
 import itertools
 import os
+from data import *
 
 
-__all__ = ['make_plots', 'plot_1d_callback']
+__all__ = ['plot_catalysis_output', 'make_plots', 'plot_1d_callback']
 
 
-def make_plots(bgo, molecule, to_file=False):
+def plot_catalysis_output(fig_name,
+                          Y,
+                          y=load_catalysis_data(),
+                          t=np.array([0.0, 1./6, 1./3, 1./2, 2./3, 5./6, 1.]),
+                          colors=['b', 'r', 'g', 'k', 'm'],
+                          linestyles=['', '--', '-.', '--+', ':'],
+                          markerstyles=['o', 'v', 's', 'D', 'p'],
+                          legend=False,
+                          title=None):
+    """
+    Draw the output of the catalysis problem.
+    
+    :param fig_name:    A name for the figure.
+    :param Y:           The samples observed.
+    :param y:           The observations.
+    :parma t:           The times of observations.
+    """
+    shape = (t.shape[0], Y.shape[0] / t.shape[0])
+    y = y.reshape(shape)
+    Y = Y.reshape(shape)
+    import matplotlib.pyplot as plt
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    for i in xrange(5):
+        ax.plot(t, Y[:, i], colors[i] + linestyles[i], linewidth=2, markersize=5.)
+    for i in xrange(5):
+        ax.plot(t, y[:, i], colors[i] + markerstyles[i], markersize=10)
+    ax.set_xlabel('Time ($\\tau$)', fontsize=26)
+    ax.set_ylabel('Concentration', fontsize=26)
+    ax.set_title(title, fontsize=26)
+    plt.setp(ax.get_xticklabels(), fontsize=26)
+    plt.setp(ax.get_yticklabels(), fontsize=26)
+    if legend:
+        leg = plt.legend(['$\operatorname{NO}_3^-$', '$\operatorname{NO}_2^-$',
+                          '$\operatorname{N}_2$', '$\operatorname{N}_2\operatorname{O}$',
+                          '$\operatorname{NH}_3$'], loc='best')
+        plt.setp(leg.get_texts(), fontsize=26)
+    ax.set_ylim([0., 1.5])
+    plt.tight_layout()
+    if fig_name:
+        print '> writing:', fig_name
+        plt.savefig(fig_name)
+    else:
+        plt.show()
+
+
+def make_plots(bgo, to_file=False):
     """
     Makes the demonstration plots.
     """
-    make_ei_plot(bgo, molecule, to_file)
-    make_energy_plot(bgo, molecule, to_file)
-    make_cluster_plot(bgo, molecule, to_file)
+    make_ei_plot(bgo, to_file)
+    make_energy_plot(bgo, to_file)
     if not to_file:
         plt.show()
 
-def make_ei_plot(bgo, molecule, to_file):
+def make_ei_plot(bgo, to_file):
     """
     Plots the evolution of the expected improvement as BGO runs.
     """
@@ -42,59 +88,24 @@ def make_ei_plot(bgo, molecule, to_file):
     ax.set_xlabel('Iteration', fontsize=16)
     ax.set_ylabel('EI', fontsize=16)
     if to_file:
-        figname = os.path.join('results', 'ei_' + molecule.get_chemical_formula() + '.png')
+        figname = os.path.join('results', 'ei.png')
         print '> writing:', figname
         plt.savefig(figname)
         plt.close(fig)
 
 
-def make_energy_plot(bgo, molecule, to_file):
+def make_energy_plot(bgo, to_file):
     """
     Plots the evolution of the energy as BGO runs.
     """
     fig, ax = plt.subplots()
     it = np.arange(1, len(bgo.current_best_value) + 1)
     ax.plot(it, bgo.current_best_value)
-    ax.set_title('Evolution of minimum observed energy', fontsize=16)
+    ax.set_title('Evolution of minimum observed loss', fontsize=16)
     ax.set_xlabel('Iteration', fontsize=16)
-    ax.set_ylabel('Energy', fontsize=16)
+    ax.set_ylabel('Loss', fontsize=16)
     if to_file:
-        figname = os.path.join('results', 'energy_' + molecule.get_chemical_formula() + '.png')
-        print '> writing:', figname
-        plt.savefig(figname)
-        plt.close(fig)
-
-
-def draw_sphere(ax, center, radius=0.2, color='r'):
-    """
-    Draw a sphere centered at ``center`` with radius ``radius``.
-    """
-    u, v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
-    x = radius * np.cos(u) * np.sin(v) + center[0]
-    y = radius * np.sin(u) * np.sin(v) + center[1]
-    z = radius * np.cos(v) + center[2]
-    ax.plot_surface(x, y, z, color=color, rstride=1, cstride=1,
-        linewidth=0)
-
-
-def make_cluster_plot(bgo, molecule, to_file):
-    """
-    Plots minimum energy cluster fond by BGO.
-    """
-    CPK_COLORS = {'H': 'w',
-                  'N': 'b',
-                  'O': 'r',
-                  'C': 'k',
-                  'F': 'g',
-                  'Cl': 'g'}
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    for x, s in itertools.izip(bgo.best_masked_design,
-                               molecule.get_chemical_symbols()):
-        draw_sphere(ax, x, color=CPK_COLORS[s])
-    ax.set_aspect('equal', 'datalim')
-    if to_file:
-        figname = os.path.join('results', 'final_cluster_' + molecule.get_chemical_formula() + '.png')
+        figname = os.path.join('results', 'loss.png')
         print '> writing:', figname
         plt.savefig(figname)
         plt.close(fig)
