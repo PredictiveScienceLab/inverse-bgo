@@ -50,7 +50,9 @@ The details of the model are explained in example 1 of our
 [paper](http://arxiv.org/abs/1410.5522).
 Contrary to the paper, here we pose the inverse problem as a minimization of
 a loss function:
+
 ![Alt text](./pics/loss_eq.png)
+
 The notation has the following meaning:
 * x: parameters that need calibrating
 * f(x): forward model
