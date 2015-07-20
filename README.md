@@ -50,7 +50,7 @@ The details of the model are explained in example 1 of our
 [paper](http://arxiv.org/abs/1410.5522).
 Contrary to the paper, here we pose the inverse problem as a minimization of
 a loss function:
-tion](http://www.sciweavers.org/tex2img.php?eq=1%2Bsin%28mc%5E2%29%0D%0A&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+[!equation](http://www.sciweavers.org/tex2img.php?eq=1%2Bsin%28mc%5E2%29%0D%0A&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
 
 The scripts produces detailed output of the BGO, and it creates the following
 figures:
