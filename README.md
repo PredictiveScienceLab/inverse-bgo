@@ -40,4 +40,15 @@ do is run the demos.
 Runnings the demos
 ------------------
 
-
+The demo is in [solve_inverse.py](./solve_inverse.py) which can be run as a 
+common Python script.
+The scripts produces detailed output of the BGO, and it writes the following
+files:
+* [results/ei.png](./results/ei.png):
+Maximum of expected improvement at each iteration of the algorithm.
+* [results/loss.png](./results/loss.png):
+Minimum observed loss function at each iteration of the BGO.
+* [results/init_fit.png](./results/init_fit.png):
+The initial fit to the data.
+* [results/final_fit.png](./results/final_fit.png):
+The final fit to the data.
