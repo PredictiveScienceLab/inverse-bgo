@@ -42,8 +42,18 @@ Runnings the demos
 
 The demo is in [solve_inverse.py](./solve_inverse.py) which can be run as a 
 common Python script.
-The scripts produces detailed output of the BGO, and it writes the following
-files:
+The demo calibrates the following catalysis model:
+![Alt text](./scheme.png)
+using this [data](./catalysis_data.txt) kindly provided by
+[Dr. Ioannis Katsounaros](http://casc.lic.leidenuniv.nl/people/katsounaros).
+The details of the model are explained in example 1 of our 
+[paper](http://arxiv.org/abs/1410.5522).
+Contrary to the paper, here we pose the inverse problem as a minimization of
+a loss function:
+tion](http://www.sciweavers.org/tex2img.php?eq=1%2Bsin%28mc%5E2%29%0D%0A&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+
+The scripts produces detailed output of the BGO, and it creates the following
+figures:
 * [results/ei.png](./results/ei.png):
 Maximum of expected improvement at each iteration of the algorithm.
 ![Alt text](./results/ei.png)
