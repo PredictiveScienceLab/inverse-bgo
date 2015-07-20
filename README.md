@@ -46,10 +46,13 @@ The scripts produces detailed output of the BGO, and it writes the following
 files:
 * [results/ei.png](./results/ei.png):
 Maximum of expected improvement at each iteration of the algorithm.
-..![Alt text](./results/ei.png)
+![Alt text](./results/ei.png)
 * [results/loss.png](./results/loss.png):
 Minimum observed loss function at each iteration of the BGO.
+![Alt text](./results/loss.png)
 * [results/init_fit.png](./results/init_fit.png):
 The initial fit to the data.
+![Alt text](./results/init_fit.png)
 * [results/final_fit.png](./results/final_fit.png):
 The final fit to the data.
+![Alt text](./results/final_fit.png)
